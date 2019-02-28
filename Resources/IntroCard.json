@@ -1,0 +1,62 @@
+{
+  "jp" :{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "body": [
+      {
+        "type": "Image",
+        "url": "https://aka.ms/bf-welcome-card-image",
+        "size": "stretch"
+      },
+      {
+        "type": "TextBlock",
+        "spacing": "medium",
+        "size": "medium",
+        "weight": "bolder",
+        "text": "**電通アイソバーチャットボットへようこそ**",
+        "wrap": true,
+        "maxLines": 0
+      },
+      {
+        "type": "TextBlock",
+        "size": "default",
+        "isSubtle": true,
+        "text": "このボットを使用すると、会議用の会議室を簡単に予約できます。 \n\nボットを実行するために何かを入力します。",
+        "wrap": true,
+        "maxLines": 0
+      }
+    ]
+  },
+
+  "en" :{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "body": [
+      {
+        "type": "Image",
+        "url": "https://aka.ms/bf-welcome-card-image",
+        "size": "stretch"
+      },
+      {
+        "type": "TextBlock",
+        "spacing": "medium",
+        "size": "medium",
+        "weight": "bolder",
+        "text": "**Welcome to Dentsu Isobar Bot**",
+        "wrap": true,
+        "maxLines": 0
+      },
+      {
+        "type": "TextBlock",
+        "size": "default",
+        "isSubtle": true,
+        "text": "This bot will help you easily book a meeting room for your meeting. \n\nType anything to run the bot.",
+        "wrap": true,
+        "maxLines": 0
+      }
+    ]
+  }
+
+}

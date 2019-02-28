@@ -1,0 +1,54 @@
+{
+    "name": "DENSTU_ISOBAR_CHATBOT",
+    "description": "",
+    "services": [
+        {
+            "type": "abs",
+            "tenantId": "6e8992ec-76d5-4ea5-8eae-b0c5e558749a",
+            "subscriptionId": "39c2eb8c-e2b3-459f-b279-ef184fa64d19",
+            "resourceGroup": "ChatbotForBooking",
+            "serviceName": "DENSTU_ISOBAR_CHATBOT",
+            "name": "DENSTU_ISOBAR_CHATBOT",
+            "id": "1",
+            "appId": "f0a530a3-8fd3-46f9-9ab9-426c81d01bce"
+        },
+        {
+            "type": "blob",
+            "connectionString": "DefaultEndpointsProtocol=https;AccountName=denstuisobarchatbotblob;AccountKey=91ogb7J184bz6MlMJ0oEfPOBn3cJN2SB/v0KWaNx2DbvYV7wadQRgyDIh5S+vvnuvW6MSdNRgZxPrj0TCtaaMA==;",
+            "tenantId": "6e8992ec-76d5-4ea5-8eae-b0c5e558749a",
+            "subscriptionId": "39c2eb8c-e2b3-459f-b279-ef184fa64d19",
+            "resourceGroup": "ChatbotForBooking",
+            "serviceName": "denstuisobarchatbotblob",
+            "id": "2"
+        },
+        {
+            "type": "endpoint",
+            "appId": "f0a530a3-8fd3-46f9-9ab9-426c81d01bce",
+            "appPassword": "e4t&%md2U1vOu]8S0ac6-Pq5rX2Pz1",
+            "endpoint": "http://localhost:3978/api/messages",
+            "name": "development",
+            "id": "3"
+        },
+        {
+            "type": "endpoint",
+            "appId": "f0a530a3-8fd3-46f9-9ab9-426c81d01bce",
+            "appPassword": "e4t&%md2U1vOu]8S0ac6-Pq5rX2Pz1",
+            "endpoint": "https://denstuisobarchatbot.azurewebsites.net/api/messages",
+            "name": "production",
+            "id": "4"
+        },
+        {
+            "type": "appInsights",
+            "instrumentationKey": "cd74731a-acdb-406c-a312-d33b8f79761a",
+            "applicationId": "01aa6f90-5a06-4da1-97f2-998d5ccb07ec",
+            "apiKeys": {},
+            "tenantId": "6e8992ec-76d5-4ea5-8eae-b0c5e558749a",
+            "subscriptionId": "39c2eb8c-e2b3-459f-b279-ef184fa64d19",
+            "resourceGroup": "ChatbotForBooking",
+            "serviceName": "DENSTU_ISOBAR_CHATBOTx5ayj7",
+            "id": "5"
+        }
+    ],
+    "padlock": "",
+    "version": "2.0"
+}
