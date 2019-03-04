@@ -215,49 +215,29 @@ module.exports = {
             "meetingDuration":""
         }
 
-        if (info['duration'] >= 60) {
-            var hour = info['duration'] / 60;
-            var minute = info['duration'] % 60;
-            data['meetingDuration'] = 'PT'+hour+'H'+minute+'M';
-        }
-        else
-            data['meetingDuration'] = 'PT'+0+'H'+info['duration']+'M'
+        data['meetingDuration'] = moment.duration(info['duration'], 'minutes').toISOString()
+        data['timeConstraint']['timeslots'][0]['start']['dateTime'] = info['date']+'T'+info['time']+'Z'
 
+        var hour = parseInt(info['time'].split(":")[0]) + time_convert(info['duration']).hours
+        var minute = parseInt(info['time'].split(":")[1]) + time_convert(info['duration']).minutes
 
-        if(info['duration']>=60){
-            var hour = parseInt(info['time'].split(":")[0]) + info['duration']/60
-            var minute = parseInt(info['time'].split(":")[1]) + info['duration']%60
+        if(minute>=60)
+            hour+=1
+            
+        data['timeConstraint']['timeslots'][0]['end']['dateTime'] = info['date']+'T'+pad(hour,2)+':'+pad(minute,2)+":00"+'Z'
+        
+        // data['timeConstraint']['timeslots'][0]['end']['dateTime'] = '2019-03-08T09:30:00Z'
 
-            if(minute>=60){
-                minute -=60
-                hour+=1
-            }
-            hour = ("0" + hour).slice(-2)
-            minute = ("0" + minute).slice(-2)
+        console.log(">>>>>>><<<<<<<<<< ",info)
+        console.log(">>>>>>><<<<<<<<<< ",data.timeConstraint.timeslots)
+        console.log(">>>>>>><<<<<<<<<< ",data)
 
-            data['timeConstraint']['timeslots'][0]['start']['dateTime'] = info['date']+'T'+info['time']+'Z'
-            data['timeConstraint']['timeslots'][0]['end']['dateTime'] = info['date']+'T'+hour+':'+minute+":00"+'Z'
-        }
-        else{
-            minute = parseInt(info['time'].split(":")[1])+info['duration']
-            hour = parseInt(info['time'].split(":")[0])
-
-            if (minute>=60){
-                minute -=60
-                hour+=1
-            }
-
-            hour = ("0" + hour).slice(-2)
-            minute = ("0" + minute).slice(-2)
-            // console.log("###### "+typeof(info['date']+'T'+info['time']+'Z'))
-            data['timeConstraint']['timeslots'][0]['start']['dateTime'] = info['date']+'T'+info['time']+'Z'
-            data['timeConstraint']['timeslots'][0]['end']['dateTime'] = info['date']+'T'+hour+':'+minute+":00"+'Z'
-        }
 
         await axios.post('https://graph.microsoft.com/v1.0/me/findMeetingTimes', data, {headers: headers})
 
             .then((response) => {
                 var temp = response.data['meetingTimeSuggestions'][0]
+                console.log(">>>>>>><<<<<<<<<< ",response)
                 result = {
                     status:false,
                     time:{
@@ -357,5 +337,18 @@ function getAuthenticatedClient(accessToken) {
     });
 
     return client;
+}
+
+function time_convert(num)
+ { 
+  var hours = Math.floor(num / 60);  
+  var minutes = num % 60;
+  return {hours, minutes};         
+}
+
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
 }
 

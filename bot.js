@@ -680,8 +680,8 @@ class MyBot {
 
           } else if(typeSpace === "internal") {
             findMeetingRooms = await Graph.forceMeetingTimes(token, {
-              date: new Date(result.date).toISOString().slice(0, 10),
-              time: result.time,
+              date: result.other[0].text.split(" ")[0],
+              time: result.other[0].text.split(" ")[1].split("-")[0],
               duration: userProfile.duration
             });
             // console.log("^^^^ ", findMeetingRooms)
@@ -729,7 +729,7 @@ class MyBot {
               );
             } else {
               await turnContext.sendActivity(
-                  `Your meeting is schedule for ${userProfile.date}. ${result.time}`
+                  `Your meeting is schedule for ${userProfile.date}. ${result.other[0].text.split(" ")[1]}`
               );
             }
             await this.sendSuggestedRooms(turnContext);
@@ -743,7 +743,7 @@ class MyBot {
               );
             } else {
               await turnContext.sendActivity(
-                  `Your meeting is schedule for ${userProfile.date} ${result.time}`
+                  `Your meeting is schedule for ${userProfile.date} ${result.other[0].text.split(" ")[1]}`
               );
             }
             await this.sendSuggestedRooms(turnContext);

@@ -92,7 +92,7 @@ const myBot = new MyBot(conversationState, userState);
 
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
-    // console.log("Headerrrr ",req.headers)
+    // console.log("Headerrrr ",req)
     // console.log("*******")
     // console.log("Body ",req.body)
     // console.log("*******")
