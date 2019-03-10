@@ -139,7 +139,7 @@ async function func (auth, data, cp){
   this.au = auth
   var times = data
   var capacity = cp;
-  var count = 0;
+  var number_time = [];
 
   // console.log("+++++++++ ", data)
 
@@ -157,7 +157,6 @@ async function func (auth, data, cp){
                 // console.log(">>>>>> 3F ",item.generatedResourceName)
                 for (var i = 0; i<times.length; i++)
                 {
-                count++;
                 if(enoughCapacity(item.generatedResourceName, capacity)) {
                         for (var i = 0; i<times.length; i++)
                         {
@@ -172,6 +171,7 @@ async function func (auth, data, cp){
                           // console.log("############# Result ",status)
                           if(status){
                             result_all_floor.push(data)
+                            number_time.push(times[i])
                           }
                     
                     }
@@ -179,8 +179,8 @@ async function func (auth, data, cp){
               }
             }
 
-        // console.log(util.inspect(result_all_floor, {showHidden: false, depth: null}))
-        return {data : result_all_floor, count:count};
+        var unique_number_time = Array.from(new Set(number_time));
+        return {data : result_all_floor, count:unique_number_time.length};
 
 
 

@@ -298,8 +298,10 @@ module.exports = {
             })
         if(info.category.includes("External") || info.category.includes("external"))
             {
+                var userr = await this.getUserDetails(accessToken)
+                console.log("######## $$$$$$$$$ ",userr.displayName)
                 var event_google = {
-                    'summary': info.subject,
+                    'summary': userr.displayName+"_"+info.subject,
                     'location': info.location.displayName,
                     'start': {
                     'dateTime': info.start.slice(0,19)+'+09:00',
