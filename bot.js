@@ -673,7 +673,7 @@ class MyBot {
             data["attendees"].push(room);
           // console.log(data);
 
-          // console.log('^^^^^^ ' + await Graph.createEvent(token, data, typeSpace));
+          console.log('^^^^^^ ' + await Graph.createEvent(token, data, typeSpace));
           // let findMeetingRooms = await Graph.forceMeetingTimes(token, {
           //     date: new Date(result.date).toISOString().slice(0, 10), time: result.time, duration: userProfile.duration });
           // console.log(findMeetingRooms);
