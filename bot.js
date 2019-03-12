@@ -35,7 +35,7 @@ let lang;
 // })();
 
 let userProfile;
-lang = 'en';  // JUST FOR TEST
+lang = 'jp';  // JUST FOR TEST
 
 // Create the settings for the OAuthPrompt.
 const OAUTH_SETTINGS = {
