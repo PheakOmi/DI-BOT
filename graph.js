@@ -259,6 +259,7 @@ module.exports = {
     },
 
     createEvent: async function(accessToken, info) {
+        console.log("GGGGGGGGGGGG")
         console.log(util.inspect(info, {showHidden: false, depth: null}))
         const res = []
         var result, status = false;
@@ -302,7 +303,7 @@ module.exports = {
                 console.log("######## $$$$$$$$$ ",userr.displayName)
                 var event_google = {
                     'summary': userr.displayName+"_"+info.subject,
-                    'location': info.location.displayName,
+                    // 'location': info.location.displayName,
                     'start': {
                     'dateTime': info.start.slice(0,19)+'+09:00',
                     'timeZone': 'Asia/Tokyo',
@@ -312,10 +313,10 @@ module.exports = {
                     'timeZone': 'Asia/Tokyo',
                     },
                     'attendees': [
-                    // {
-                    //     'email': info.location.locationEmailAddress,
-                    //     'resource': true
-                    // },
+                    {
+                        'email': info.location.locationEmailAddress,
+                        'resource': true
+                    },
                     {
                         'email': 'dentsu-isobar-01@cci.co.jp',
                         'responseStatus':'accepted'
