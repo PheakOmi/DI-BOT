@@ -35,7 +35,7 @@ let lang;
 // })();
 
 let userProfile;
-lang = 'en';  // JUST FOR TEST
+lang = 'jp';  // JUST FOR TEST
 
 // Create the settings for the OAuthPrompt.
 const OAUTH_SETTINGS = {
@@ -689,15 +689,17 @@ class MyBot {
 
           await turnContext.sendActivity(v[lang]);
           if (lang === "jp") {
-            await turnContext.sendActivity(`会議の詳細: 
-              タイトル:          ${userProfile.title}
-              開始:          ${userProfile.start}
-              終わり:            ${userProfile.end}
-              日付:           ${userProfile.date}
-              期間:       ${userProfile.duration}
-              参加者:      ${userProfile.name}
-              電子メール:         ${userProfile.email}
-              ルーム:           ${userProfile.room}`);
+            await turnContext.sendActivity(`
+**会議の詳細** 
+* タイトル:          ${userProfile.title}
+* 開始:          ${userProfile.start}
+* 終わり:            ${userProfile.end}
+* 日付:           ${userProfile.date}
+* 期間:       ${userProfile.duration}
+* 参加者:      ${userProfile.name}
+* 電子メール:         ${userProfile.email}
+* ルーム:           ${userProfile.room}`
+            );
             await turnContext.sendActivity(
               "ボットを再実行するために何かを入力。"
             );
