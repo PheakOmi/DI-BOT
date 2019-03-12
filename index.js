@@ -92,22 +92,8 @@ const myBot = new MyBot(conversationState, userState);
 
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
-    // console.log("Headerrrr ",req)
-    // console.log("*******")
-    // console.log("Body ",req.body)
-    // console.log("*******")
-    // console.log("Param ",req.params)
-    // if(req.body.text=='special'){
-    //     adapter.processActivity(req, res, async (context) => {
-    //         myBot.show({ success: true, title: 'QWERTY' }, context);
-    //     });
-
-    // }
-    // else{
         adapter.processActivity(req, res, async (context) => {
             // Route to main dialog.
             await myBot.onTurn(context);
         });
-    // }
-
 });
