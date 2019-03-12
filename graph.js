@@ -297,7 +297,7 @@ module.exports = {
                 console.log("Response ",error)
                 status = false;
             })
-        if(info.category.includes("External") || info.category.includes("external"))
+        if(info.category.includes("External") || info.category.includes("external")|| info.category.includes("外部"))
             {
                 var userr = await this.getUserDetails(accessToken)
                 console.log("######## $$$$$$$$$ ",userr.displayName)
