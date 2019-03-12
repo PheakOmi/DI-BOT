@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a4a3f115-00cb-45dd-b9b9-54339738d242" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resources/Language.json" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Language.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.js" beforeDir="false" afterPath="$PROJECT_DIR$/bot.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -32,8 +31,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bot.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="717" column="16" lean-forward="true" selection-start-line="717" selection-start-column="16" selection-end-line="717" selection-end-column="16" />
+            <state relative-caret-position="284">
+              <caret line="727" column="14" lean-forward="true" selection-start-line="727" selection-start-column="14" selection-end-line="727" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -239,12 +238,12 @@
       <workItem from="1552202530398" duration="10758000" />
       <workItem from="1552285564087" duration="4303000" />
       <workItem from="1552360031582" duration="2199000" />
-      <workItem from="1552362290489" duration="2657000" />
+      <workItem from="1552362290489" duration="5226000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="169332000" />
+    <option name="totallyTimeSpent" value="171901000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -293,7 +292,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bot.js</url>
-          <line>925</line>
+          <line>940</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -328,17 +327,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bot.js</url>
-          <line>905</line>
+          <line>920</line>
           <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bot.js</url>
-          <line>907</line>
+          <line>922</line>
           <option name="timeStamp" value="47" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bot.js</url>
-          <line>903</line>
+          <line>918</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
       </breakpoints>
@@ -463,8 +462,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bot.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="717" column="16" lean-forward="true" selection-start-line="717" selection-start-column="16" selection-end-line="717" selection-end-column="16" />
+        <state relative-caret-position="284">
+          <caret line="727" column="14" lean-forward="true" selection-start-line="727" selection-start-column="14" selection-end-line="727" selection-end-column="14" />
         </state>
       </provider>
     </entry>

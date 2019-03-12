@@ -702,15 +702,17 @@ class MyBot {
               "ボットを再実行するために何かを入力。"
             );
           } else {
-            await turnContext.sendActivity(`**Meeting Detail:**
-                                             Title:          ${userProfile.title}
-                                             Start:          ${userProfile.start}
-                                             End:            ${userProfile.end}
-                                             Date:           ${userProfile.date}
-                                             Duration:       ${userProfile.duration}
-                                             Attendees:      ${userProfile.name}
-                                             Emails:         ${userProfile.email}
-                                             Room:           ${userProfile.room}`);
+            await turnContext.sendActivity(`
+**Meeting Detail** 
+* Title:          ${userProfile.title}
+* Start:          ${userProfile.start}
+* End:            ${userProfile.end}
+* Date:           ${userProfile.date}
+* Duration:       ${userProfile.duration}
+* Attendees:      ${userProfile.name}
+* Emails:         ${userProfile.email}
+* Room:           ${userProfile.room}`
+            );
             await turnContext.sendActivity("Type anything to run the bot again.");
           }
           conversationData.lastQuestionAsked = question.none;
