@@ -78,7 +78,7 @@ let availableDateTimeList = [];
 let availableRoomList = [];
 // let MeetingRooms = [];
 let object = {};
-let token;
+let token = '';
 
 class MyBot {
   constructor(conversationState, userState) {
@@ -131,6 +131,7 @@ class MyBot {
     if (tokenResponse != null) {
       await step.context.sendActivity(Language[lang].loggedInSuccess);
       token = tokenResponse.token;
+      // console.log(token);
       return await step.endDialog();
       // return await step.prompt(CONFIRM_PROMPT, 'Do you want to view your token?', ['yes', 'no']);
     }
@@ -235,6 +236,12 @@ class MyBot {
         }
       }
     } else if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
+        let botAdapter = turnContext.adapter;
+        await botAdapter.signOutUser(turnContext, CONNECTION_NAME);
+        // await turnContext.sendActivity(Language[lang].loggedOutSuccess);
+        // conversationData.lastQuestionAsked = question.none;
+        token = "";
+        // await turnContext.sendActivity(Language[lang].HELP_TEXT);
       await this.sendWelcomeMessage(turnContext);
     } else if (
       turnContext.activity.type === ActivityTypes.Invoke ||
@@ -695,24 +702,17 @@ class MyBot {
               "ボットを再実行するために何かを入力。"
             );
           } else {
-            await turnContext.sendActivity(`Meeting detail: 
-                                            Title:          ${userProfile.title}
-                                            Start:          ${userProfile.start}
-                                            End:            ${userProfile.end}
-                                            Date:           ${userProfile.date}
-                                            Duration:       ${
-                                              userProfile.duration
-                                            }
-                                            Attendees:      ${userProfile.name}
-                                            Emails:         ${userProfile.email}
-                                            Room:           ${
-                                              userProfile.room
-                                            }`);
-            await turnContext.sendActivity(
-              "Type anything to run the bot again."
-            );
+            await turnContext.sendActivity(`**Meeting Detail:**
+                                             Title:          ${userProfile.title}
+                                             Start:          ${userProfile.start}
+                                             End:            ${userProfile.end}
+                                             Date:           ${userProfile.date}
+                                             Duration:       ${userProfile.duration}
+                                             Attendees:      ${userProfile.name}
+                                             Emails:         ${userProfile.email}
+                                             Room:           ${userProfile.room}`);
+            await turnContext.sendActivity("Type anything to run the bot again.");
           }
-
           conversationData.lastQuestionAsked = question.none;
           userProfile = {};
           break;
