@@ -49,14 +49,17 @@
     "enterAtLeastOneCharacter": "Please enter a name that contain at least one character.",
     "doNotUnderstandDuration": "I'm sorry, I could not interpret that as a number. Please enter duration between 5 and 180.",
     "durationOnlyNumberAccepted": "Only number is accepted. Duration can be between 5 minutes to 180 minutes.",
-    "selectOneOptionAbove": "Please select one of the option above.",
+    "selectOneOptionAbove": "Please select one of the option.",
+    "specifyDateAndTime": "Please specify the date & time",
     "tokenDisplay": "Here is your token:",
     "HELP_TEXT": "Type anything to get logged in. Type 'logout' to sign out.",
-    "RESTART_TEXT": "Booking Restart. Type anything to start the conversation."
+    "RESTART_TEXT": "Booking Restart. Type anything to start the conversation.",
+    "helpCardTitle": "**Following are commands that I can understand.** \n Restart: to restart our conversation. \n Logout: to clear your signed in info.",
+    "noAttendeeSelected": "No attendees selected"
   },
   "jp": {
     "introCardTitle": "Dentsu Isobarチャットボットへようこそ",
-    "introCardDescription": "このチャットボットで会議室を簡単に予約できます。開始するのに何か入力してください。 ",
+    "introCardDescription": "このチャットボットで会議室を簡単に予約できます。開始するのにキーを入力してください。 ",
     "signInTitle": "サインインしてください。",
     "signIn": "サインイン",
     "loggedInSuccess": "ログインが完了しました。",
@@ -104,9 +107,12 @@
     "enterAtLeastOneCharacter": "一文字以上の名前を入力してください。",
     "doNotUnderstandDuration": "すみません、数字のみ入力可能です。期間は５分から１８０分で入力してください。",
     "durationOnlyNumberAccepted": "数字のみ入力可能です。期間は５分から１８０分で入力してください。",
-    "selectOneOptionAbove": "上記の選択肢から選んでください。",
+    "selectOneOptionAbove": "選択肢からひとつ選んでください。",
+    "specifyDateAndTime": "日時を特定してください。",
     "tokenDisplay": "これがトークンです。",
     "HELP_TEXT": "ログインするには何か入力してください。「ログアウト」と入力すると、サインアウトします。",
-    "RESTART_TEXT": "Booking Restart. Type anything to start the conversation.(JAPAN)"
+    "RESTART_TEXT": "予約をやり直してください。キーを入力して会話を開始してください。",
+    "helpCardTitle": "**理解できるコマンドはこちらです** \n やり直す: 会話をやり直します。. \n ログアウト: サインインした情報をクリアします。",
+    "noAttendeeSelected": "参加者を選択していません。"
   }
 }

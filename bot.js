@@ -35,7 +35,7 @@ let lang;
 // })();
 
 let userProfile;
-lang = 'jp';  // JUST FOR TEST
+lang = 'en';  // JUST FOR TEST
 
 // Create the settings for the OAuthPrompt.
 const OAUTH_SETTINGS = {
@@ -76,7 +76,6 @@ const employeesList = allEmployees;
 let employeesToShow = [];
 let availableDateTimeList = [];
 let availableRoomList = [];
-// let MeetingRooms = [];
 let object = {};
 let token = '';
 
@@ -104,8 +103,7 @@ class MyBot {
     this.dialogs.add(new OAuthPrompt(OAUTH_PROMPT, OAUTH_SETTINGS));
 
     // The WaterfallDialog that controls the flow of the conversation.
-    this.dialogs.add(
-      new WaterfallDialog(AUTH_DIALOG, [
+    this.dialogs.add(new WaterfallDialog(AUTH_DIALOG, [
         this.oauthPrompt,
         this.loginResults,
         this.displayToken
@@ -118,7 +116,7 @@ class MyBot {
    * @param {WaterfallStepContext} step
    */
   async oauthPrompt(step) {
-    return await step.prompt(OAUTH_PROMPT);
+      return await step.prompt(OAUTH_PROMPT);
   }
 
   /**
@@ -189,11 +187,18 @@ class MyBot {
       });
 
       // Create an array with the valid options.
-      const validCommands = ["logout", "help", "restart", "ログアウト", "ヘルプ", "やり直す"];
+      const validCommands = ["logout", "help", "restart", "ログアウト", "ヘルプ", "やり直す", "jp", "en"];
       await dc.continueDialog();
 
       // If the user asks for help, send a message to them informing them of the operations they can perform.
       if (validCommands.includes(text)) {
+          if (text === "jp") {
+              lang = "jp";
+              await turnContext.sendActivity("日本語が有効になりました。");
+          } else if (text === "en") {
+              lang = "en";
+              await turnContext.sendActivity("English Is Now Activated.");
+          }
         if (text === "help" || text === "ヘルプ") {
           await turnContext.sendActivity(Language[lang].HELP_TEXT);
         }
@@ -212,7 +217,9 @@ class MyBot {
           await turnContext.sendActivity(Language[lang].RESTART_TEXT);
         }
       } else {
+        // console.log(!turnContext.responded);
         if (!turnContext.responded && !token) {
+        // if (!turnContext.responded) {
           await dc.beginDialog(AUTH_DIALOG);
         } else {
           userProfile = await this.userProfile.get(turnContext, {});
@@ -237,10 +244,10 @@ class MyBot {
       }
     } else if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
         let botAdapter = turnContext.adapter;
-        await botAdapter.signOutUser(turnContext, CONNECTION_NAME);
+        // await botAdapter.signOutUser(turnContext, CONNECTION_NAME);
         // await turnContext.sendActivity(Language[lang].loggedOutSuccess);
         // conversationData.lastQuestionAsked = question.none;
-        token = "";
+        // token = "";
         // await turnContext.sendActivity(Language[lang].HELP_TEXT);
       await this.sendWelcomeMessage(turnContext);
     } else if (
@@ -280,33 +287,7 @@ class MyBot {
       // If we're just starting off, we haven't asked the user for any information yet.
       // Ask the user for their intend and update the conversation flag.
       case question.none:
-        // build buttons to display.
-        const buttons = [
-          {
-            type: ActionTypes.ImBack,
-            // title: msg[0][lang],
-            title: Language[lang].startToBookMeetingRoom,
-            // value: "Start to book meeting room"
-            value: Language[lang].startToBookMeetingRoom
-          },
-          { type: ActionTypes.ImBack,
-            // title: msg[5][lang],
-            title: Language[lang].logOut,
-            // value: "logout"
-            value: Language[lang].logOut
-          }
-        ];
-
-        // construct hero card.
-        const card = CardFactory.heroCard(
-            Language[lang].intendCardTitle,
-            // msg[1][lang],
-            undefined, buttons, {});
-        // add card to Activity.
-        const reply = { type: ActivityTypes.Message };
-        reply.attachments = [card];
-        // Send hero card to the user.
-        await turnContext.sendActivity(reply);
+          await this.sendInitialActions(turnContext);
         conversationData.lastQuestionAsked = question.name;
         break;
       // If we last asked for their intend, record their response, confirm that we got it.
@@ -332,6 +313,7 @@ class MyBot {
           // Don't update the conversation flag, so that we repeat this step.
           // await turnContext.sendActivity(result.message || msg[2][lang]);
           await turnContext.sendActivity(result.message || Language[lang].doNotUnderstand);
+            await this.sendInitialActions(turnContext);
           break;
         }
       // If we last asked for attendees, record their response, confirm that we got it.
@@ -341,7 +323,7 @@ class MyBot {
           splitResults = input.split(",");
         } else {
           if (lang === "jp") {
-            await turnContext.sendActivity(`${userProfile.name} ${Language[lang].arrangeAttendee}`);
+            await turnContext.sendActivity(`${userProfile.name} ${Language.jp.arrangeAttendee}`);
           } else {
             await turnContext.sendActivity(`${Language.en.arrangeAttendee} ${userProfile.name}.`);
           }
@@ -368,8 +350,16 @@ class MyBot {
               console.log(splitResult + " declined");
             }
           }
+
+          if (!userProfile.name.length) {
+              await turnContext.sendActivity(result.message || Language[lang].doNotUnderstand + Language[lang].invalidEmployee);
+              await turnContext.sendActivity(Language[lang].noAttendeeSelected);
+              await this.sendSuggestedAttendees(turnContext);
+              break;
+          }
+
           if (lang === "jp") {
-            await turnContext.sendActivity(`${userProfile.name} ${Language.en.arrangeAttendee}`);
+            await turnContext.sendActivity(`${userProfile.name} ${Language.jp.arrangeAttendee}`);
           } else {
             await turnContext.sendActivity(`${Language.en.arrangeAttendee} ${userProfile.name}.`);
           }
@@ -388,7 +378,6 @@ class MyBot {
             employeesList.splice(index, 1);
             if (employeesList.length > 3) {
               employeesToShow = this.getRandom(employeesList, 2);
-              // employeesToShow.push("Other");
               employeesToShow.push(Language[lang].other);
             }
           }
@@ -408,12 +397,10 @@ class MyBot {
         if (result.success) {
           userProfile.duration = result.duration;
           if (lang === "jp") {
-            // await turnContext.sendActivity(`会議を ${userProfile.duration} 分間手配します。`);
             await turnContext.sendActivity(`${userProfile.duration} ${Language[lang].arrangeDuration}`);
           } else {
             await turnContext.sendActivity(`${Language[lang].arrangeDuration} ${userProfile.duration} mns.`);
           }
-          // await turnContext.send(`${Language.en.arrangeDuration} ${userProfile.duration} mns.`);
           await turnContext.sendActivity(Language[lang].meetingNameInput);
           conversationData.lastQuestionAsked = question.space;
           break;
@@ -445,22 +432,17 @@ class MyBot {
           const buttons = [
             {
               type: ActionTypes.ImBack,
-              // title: "External (" + meetingTime.external.length + ")",
               title: `${Language[lang].external} (${meetingTime.external.count})`,
-              // value: "External (" + meetingTime.external.count + ")"
               value: `${Language[lang].external} (${meetingTime.external.count})`
             },
             {
               type: ActionTypes.ImBack,
-              // title: "Internal (" + meetingTime.internal.length + ")",
               title: `${Language[lang].internal} (${meetingTime.internal.length})`,
-              // value: "Internal (" + meetingTime.internal.length + ")"
               value: `${Language[lang].internal} (${meetingTime.internal.length})`
             }
           ];
 
           // construct hero card.
-        // const card = CardFactory.heroCard(msg[13][lang], undefined, buttons, {});
         const card = CardFactory.heroCard(Language[lang].categorizedRoomTypeSuggestionTitle, undefined, buttons, {});
         // add card to Activity.
         const reply = { type: ActivityTypes.Message };
@@ -477,14 +459,11 @@ class MyBot {
       // If we last ask for a date, record their response, confirm that we got it.
       // Ask them for their preference room, and update the conversation flag.
       case question.title:
-        // console.log(input);
         availableDateTimeList = [];
         result = this.validateTitle(input);
         result.success = true;
         if (input.includes("External") || input.includes("外部")) {
           typeSpace = "external";
-          // console.log("########", typeSpace);
-          // availableDateTimeList.push("Internal");
           availableDateTimeList.push(Language[lang].internal);
           meetingTime.external.data.forEach(function(obj) {
             availableDateTimeList.push(
@@ -498,7 +477,6 @@ class MyBot {
 
         } else if (input.includes("Internal") || input.includes("内部")) {
           typeSpace = "internal";
-          // availableDateTimeList.push("External");
           availableDateTimeList.push(Language[lang].external);
           meetingTime.internal.forEach(function(obj) {
             availableDateTimeList.push(
@@ -512,38 +490,30 @@ class MyBot {
         }
 
         availableDateTimeList =  this.removeDups(availableDateTimeList);
-
-        // availableDateTimeList.push("Other");
           availableDateTimeList.push(Language[lang].other);
 
         if (result.success) {
           userProfile.category = result.title;
 
-          // await turnContext.sendActivity('Which do you like?');
           await this.sendSuggestedDates(turnContext);
-          //var re = MessageFactory.suggestedActions(['Red', 'Yellow', 'Blue'], 'What is the best color?');
           conversationData.lastQuestionAsked = question.date;
 
           break;
         } else {
-          // await turnContext.sendActivity(result.message || msg[2][lang]);
           await turnContext.sendActivity(result.message || Language[lang].doNotUnderstand);
           await this.sendSuggestedDates(turnContext);
           break;
         }
 
       case question.date:
-        // console.log("typeSpaceeeeee", typeSpace);
         let index = availableDateTimeList.indexOf(input);
         if (input.trim().toLowerCase() === "other" || input === Language[lang].other) {
           typeSpace='other';
-          // console.log("Other Date & Time");
-          await turnContext.sendActivity(`Please specify the date & time`);
+          await turnContext.sendActivity(Language[lang].specifyDateAndTime);
           break;
         }
         result = this.validateDate(input);
         let findMeetingRooms = {};
-        // console.log("$$$$$$ ", availableRoomList)
         if (result.success) {
           if (typeSpace === "external") {
             findMeetingRooms = meetingTime.external.data[index - 1];
@@ -560,7 +530,6 @@ class MyBot {
               time: result.other[0].text.split(" ")[1].split("-")[0],
               duration: userProfile.duration
             });
-            // console.log("^^^^ ", findMeetingRooms)
             availableRoomList = [];
             findMeetingRooms.locations.forEach(function(obj) {
               object[obj.displayName.trim().toLowerCase()] =
@@ -576,7 +545,7 @@ class MyBot {
           // findMeetingRooms.forEach(function(obj) {
           //     availableRoomList.push(obj.displayName);
           // });
-          else{
+          else {
             console.log("!!!@@@@", result.other[0].text.split(" ")[0], "   ", result.other[0].text.split(" ")[1]);
             findMeetingRooms = await Graph.forceMeetingTimes(token, {
               date: result.other[0].text.split(" ")[0],
@@ -671,64 +640,33 @@ class MyBot {
           };
           if(typeSpace === "internal")
             data["attendees"].push(room);
-          // console.log(data);
 
-          console.log('^^^^^^ ' + await Graph.createEvent(token, data, typeSpace));
-          // let findMeetingRooms = await Graph.forceMeetingTimes(token, {
-          //     date: new Date(result.date).toISOString().slice(0, 10), time: result.time, duration: userProfile.duration });
-          // console.log(findMeetingRooms);
-          // findMeetingRooms.locations.forEach(function(obj) {
-          //     availableRoomList.push(obj.displayName);
-          // });
-          let v = {
-            jp:
-              "会議室が予約されました。私はこの会議を出席者全員のカレンダーにスケジュールしました。",
-            en:
-              "Meeting room has been booked. I’ve scheduled this meeting to all of attendees's calendar."
-          };
-
-          await turnContext.sendActivity(v[lang]);
-          if (lang === "jp") {
+          await turnContext.sendActivity(Language[lang].meetingBookedSuccess);
             await turnContext.sendActivity(`
-**会議の詳細** 
-* タイトル:          ${userProfile.title}
-* 開始:          ${userProfile.start}
-* 終わり:            ${userProfile.end}
-* 日付:           ${userProfile.date}
-* 期間:       ${userProfile.duration}
-* 参加者:      ${userProfile.name}
-* 電子メール:         ${userProfile.email}
-* ルーム:           ${userProfile.room}`
+**${Language[lang].meetingDetail}** 
+* ${Language[lang].title}:          ${userProfile.title}
+* ${Language[lang].start}:          ${userProfile.start}
+* ${Language[lang].end}:            ${userProfile.end}
+* ${Language[lang].date}:           ${userProfile.date}
+* ${Language[lang].duration}:       ${userProfile.duration}
+* ${Language[lang].attendees}:      ${userProfile.name}
+* ${Language[lang].emails}:         ${userProfile.email}
+* ${Language[lang].room}:           ${userProfile.room}`
             );
-            await turnContext.sendActivity(
-              "ボットを再実行するために何かを入力。"
-            );
-          } else {
-            await turnContext.sendActivity(`
-**Meeting Detail** 
-* Title:          ${userProfile.title}
-* Start:          ${userProfile.start}
-* End:            ${userProfile.end}
-* Date:           ${userProfile.date}
-* Duration:       ${userProfile.duration}
-* Attendees:      ${userProfile.name}
-* Emails:         ${userProfile.email}
-* Room:           ${userProfile.room}`
-            );
-            await turnContext.sendActivity("Type anything to run the bot again.");
-          }
+            await turnContext.sendActivity(Language[lang].runBotAgain);
           conversationData.lastQuestionAsked = question.none;
           userProfile = {};
           break;
         } else {
-          // await turnContext.sendActivity(result.message || msg[2][lang]);
           await turnContext.sendActivity(result.message || Language[lang].doNotUnderstand);
+            await this.sendSuggestedRooms(turnContext);
           break;
         }
     }
   }
 
   // *****Validation***** //
+  // *****Duplication Removal***** //
   static removeDups(names) {
     let unique = {};
     names.forEach(function(i) {
@@ -739,6 +677,7 @@ class MyBot {
     return Object.keys(unique);
   }
 
+  // *****Find External Rooms***** //
   static findExternalRoomByDate(date, rooms){
     let outputs = [];
     let start, end;
@@ -760,14 +699,14 @@ class MyBot {
     return {'rooms':outputs, 'start':start, 'end':end};
   }
 
+  // *****Initial Input Validation***** //
   static validateInitialInput(input) {
     const initialInput = input && input.trim().toLowerCase();
     return initialInput === "start to book meeting room" || initialInput === "会議室を予約する"
         ? { success: true, initialInput: initialInput } : { success: false, message: Language[lang].selectOneOptionAbove };
-      // : { success: false, message: "Please select one of the option above." };
   }
 
-
+  // *****Duration Validation***** //
   static validateDuration(input) {
     // Try to recognize the input as a number. This work for response such as "twelve" as well as "12".
     try {
@@ -778,10 +717,6 @@ class MyBot {
         Recognizers.Culture.English
       );
       let output;
-      let rr = {
-        'jp':'数字だけが受け入れられます。所要時間は5分から180分です。',
-        'en': 'Only number is accepted. Duration can be between 5 minutes to 180 minutes.'
-      };
       results.forEach(function(result) {
         // result.resolution is a dictionary, where the "value" entry contains the processed string.
         const value = result.resolution["value"];
@@ -796,14 +731,14 @@ class MyBot {
       return (
         output || {
           success: false,
-          message: rr[lang]
+          message: Language[lang].durationOnlyNumberAccepted
         }
       );
     } catch (e) {
       return {
         success: false,
         message:
-          "I'm sorry, I could not interpret that as an age. Please enter an age between 18 and 120."
+          "I'm sorry, I could not interpret that as a number. Please enter duration between 18 and 120."
       };
     }
   }
@@ -855,8 +790,6 @@ class MyBot {
     }
   }
 
-
-
   // *****Room Validation***** //
   static validateRoom(input) {
     const room = input && input.trim().toLowerCase();
@@ -882,6 +815,37 @@ class MyBot {
           "I'm sorry, I could not interpret that as a name. Please enter a valid name."
       };
     }
+  }
+
+  // *****Send Initial Action List***** //
+  static async sendInitialActions(turnContext) {
+      // build buttons to display.
+      const buttons = [
+          {
+              type: ActionTypes.ImBack,
+              // title: msg[0][lang],
+              title: Language[lang].startToBookMeetingRoom,
+              // value: "Start to book meeting room"
+              value: Language[lang].startToBookMeetingRoom
+          },
+          { type: ActionTypes.ImBack,
+              // title: msg[5][lang],
+              title: Language[lang].logOut,
+              // value: "logout"
+              value: Language[lang].logOut
+          }
+      ];
+
+      // construct hero card.
+      const card = CardFactory.heroCard(
+          Language[lang].intendCardTitle,
+          // msg[1][lang],
+          undefined, buttons, {});
+      // add card to Activity.
+      const reply = { type: ActivityTypes.Message };
+      reply.attachments = [card];
+      // Send hero card to the user.
+      await turnContext.sendActivity(reply);
   }
 
   // *****Send Suggested List***** //

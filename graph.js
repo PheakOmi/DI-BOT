@@ -119,9 +119,9 @@ module.exports = {
             }
             data['attendees'].push(obj)
         })
-        
+
         data['meetingDuration'] = moment.duration(info['duration'], 'minutes').toISOString()
-            
+
         console.log("DDDDD ", data);
 
         await axios.post('https://graph.microsoft.com/v1.0/me/findMeetingTimes', data, {headers: headers})
@@ -221,11 +221,13 @@ module.exports = {
         var hour = parseInt(info['time'].split(":")[0]) + time_convert(info['duration']).hours
         var minute = parseInt(info['time'].split(":")[1]) + time_convert(info['duration']).minutes
 
-        if(minute>=60)
-            hour+=1
-            
+        if(minute>=60){
+            hour+=1;
+            minute-=60;
+        }
+
         data['timeConstraint']['timeslots'][0]['end']['dateTime'] = info['date']+'T'+pad(hour,2)+':'+pad(minute,2)+":00"+'Z'
-        
+
         // data['timeConstraint']['timeslots'][0]['end']['dateTime'] = '2019-03-08T09:30:00Z'
 
         console.log(">>>>>>><<<<<<<<<< ",info)
@@ -343,10 +345,10 @@ function getAuthenticatedClient(accessToken) {
 }
 
 function time_convert(num)
- { 
-  var hours = Math.floor(num / 60);  
+ {
+  var hours = Math.floor(num / 60);
   var minutes = num % 60;
-  return {hours, minutes};         
+  return {hours, minutes};
 }
 
 function pad(num, size) {
